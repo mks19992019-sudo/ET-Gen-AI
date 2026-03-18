@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HireSignal - Autonomous HR Hiring Intelligence Agent</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>HireSignal</h1>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-link active" data-page="dashboard">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Dashboard</span>
+        </a>
+        <a href="#" class="nav-link" data-page="live-log">
+          <span class="nav-icon">🤖</span>
+          <span class="nav-label">Live Agent Log</span>
+        </a>
+        <a href="#" class="nav-link" data-page="hiring-decisions">
+          <span class="nav-icon">📋</span>
+          <span class="nav-label">Hiring Decisions</span>
+        </a>
+        <a href="#" class="nav-link" data-page="job-descriptions">
+          <span class="nav-icon">📄</span>
+          <span class="nav-label">Job Descriptions</span>
+        </a>
+        <a href="#" class="nav-link" data-page="audit-trail">
+          <span class="nav-icon">🔍</span>
+          <span class="nav-label">Audit Trail</span>
+        </a>
+        <a href="#" class="nav-link" data-page="workforce-data">
+          <span class="nav-icon">👥</span>
+          <span class="nav-label">Workforce Data</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Dashboard Page -->
+      <section id="dashboard" class="page active">
+        <div class="page-header">
+          <h2>Dashboard</h2>
+          <div class="header-controls">
+            <div class="agent-status" id="agentStatus">
+              <span class="status-indicator status-idle"></span>
+              <span class="status-text">IDLE</span>
+            </div>
+            <button class="btn btn-primary" id="runAgentBtn">▶ Run Agent Now</button>
+          </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-value" id="totalEmployees">-</div>
+            <div class="stat-label">Total Employees</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="teamsMonitored">-</div>
+            <div class="stat-label">Teams Monitored</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="openHiringRequests">-</div>
+            <div class="stat-label">Open Hiring Requests</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="jobsPostedMonth">-</div>
+            <div class="stat-label">Jobs Posted This Month</div>
+          </div>
+        </div>
+
+        <!-- Signal Health Section -->
+        <div class="signals-section">
+          <h3>Signal Health</h3>
+          <div id="signalsContainer" class="signals-grid">
+            <div class="loading-spinner"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Live Agent Log Page -->
+      <section id="live-log" class="page">
+        <div class="page-header">
+          <h2>Live Agent Log</h2>
+          <button class="btn btn-secondary" id="clearLogsBtn">Clear Logs</button>
+        </div>
+
+        <div id="connectionStatus" class="connection-status">
+          <span class="status-dot"></span>
+          <span class="status-label">Connected</span>
+        </div>
+
+        <div id="liveLogsContainer" class="live-logs">
+          <div class="log-placeholder">Waiting for agent to start...</div>
+        </div>
+      </section>
+
+      <!-- Hiring Decisions Page -->
+      <section id="hiring-decisions" class="page">
+        <div class="page-header">
+          <h2>Hiring Decisions</h2>
+        </div>
+
+        <div id="hiringDecisionsContainer" class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Department</th>
+                <th>Role Needed</th>
+                <th>Urgency</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="hiringDecisionsTableBody">
+              <tr><td colspan="7"><div class="loading-spinner"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Job Descriptions Page -->
+      <section id="job-descriptions" class="page">
+        <div class="page-header">
+          <h2>Job Descriptions</h2>
+        </div>
+
+        <div id="jobDescriptionsContainer" class="cards-grid">
+          <div class="loading-spinner"></div>
+        </div>
+      </section>
+
+      <!-- Audit Trail Page -->
+      <section id="audit-trail" class="page">
+        <div class="page-header">
+          <h2>Audit Trail</h2>
+          <div class="filter-group">
+            <select id="auditFilterDate" class="filter-select">
+              <option value="all">All</option>
+              <option value="today">Today</option>
+              <option value="week">This Week</option>
+            </select>
+            <select id="auditFilterAgent" class="filter-select">
+              <option value="">All Agents</option>
+            </select>
+            <button class="btn btn-secondary" id="exportAuditBtn">📥 Export</button>
+          </div>
+        </div>
+
+        <div id="auditTrailContainer" class="audit-timeline">
+          <div class="loading-spinner"></div>
+        </div>
+      </section>
+
+      <!-- Workforce Data Page -->
+      <section id="workforce-data" class="page">
+        <div class="page-header">
+          <h2>Workforce Data</h2>
+        </div>
+
+        <div class="workforce-grid">
+          <div class="workforce-section">
+            <h3>Teams Overview</h3>
+            <div id="teamsTableContainer" class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Team Name</th>
+                    <th>Department</th>
+                    <th>Headcount</th>
+                    <th>Min Required</th>
+                    <th>Avg Hours/Week</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="teamsTableBody">
+                  <tr><td colspan="6"><div class="loading-spinner"></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="workforce-section">
+            <h3>Recent Employee Changes</h3>
+            <div id="employeeChangesContainer" class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Department</th>
+                    <th>Change Type</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody id="employeeChangesTableBody">
+                  <tr><td colspan="5"><div class="loading-spinner"></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: View JD -->
+  <div id="viewJdModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="jdModalTitle">Job Description</h3>
+        <button class="modal-close" onclick="closeModal('viewJdModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="jdModalBody" class="jd-text"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('viewJdModal')">Close</button>
+        <button class="btn btn-primary" id="approveJdBtn">✓ Approve JD</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Approve Decision -->
+  <div id="approveDecisionModal" class="modal">
+    <div class="modal-content modal-small">
+      <div class="modal-header">
+        <h3>Confirm Approval</h3>
+        <button class="modal-close" onclick="closeModal('approveDecisionModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to approve this hiring decision?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('approveDecisionModal')">Cancel</button>
+        <button class="btn btn-success" id="confirmApproveBtn">✓ Approve</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Reject Decision -->
+  <div id="rejectDecisionModal" class="modal">
+    <div class="modal-content modal-small">
+      <div class="modal-header">
+        <h3>Reject Decision</h3>
+        <button class="modal-close" onclick="closeModal('rejectDecisionModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <label for="rejectReasonInput">Reason for rejection:</label>
+        <textarea id="rejectReasonInput" placeholder="Enter reason..." class="form-input"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('rejectDecisionModal')">Cancel</button>
+        <button class="btn btn-danger" id="confirmRejectBtn">✗ Reject</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
